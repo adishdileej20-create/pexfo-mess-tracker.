@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#101827">
+  <meta name="description" content="Track hostel mess days and separate extra food expenses.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <title>PEXFO Mess Tracker</title>
+</head>
+<body>
+<main class="app">
+  <header class="topbar">
+    <div class="brand"><div class="logo">P</div><div><h1>PEXFO</h1><p>MESS TRACKER</p></div></div>
+    <button id="installBtn" class="icon-btn" hidden>＋ Install</button>
+  </header>
+
+  <nav class="tabs" aria-label="Main sections">
+    <button class="tab active" data-tab="mess">🍽️ Mess</button>
+    <button class="tab" data-tab="extras">🧋 Extras</button>
+    <button class="tab" data-tab="settings">⚙️ Settings</button>
+  </nav>
+
+  <section id="messTab" class="tab-panel">
+    <section class="hero">
+      <div class="eyebrow">MESS BILL · THIS MONTH</div>
+      <div class="bill" id="billAmount">₹0</div>
+      <div class="hero-sub" id="billFormula">0 full days × ₹140</div>
+      <div class="stats">
+        <div class="stat"><span class="dot ate-dot"></span><div><strong id="ateCount">0</strong><small>Ate all meals</small></div></div>
+        <div class="stat"><span class="dot skip-dot"></span><div><strong id="skipCount">0</strong><small>Skipped</small></div></div>
+        <div class="stat"><span class="dot save-dot"></span><div><strong id="savedAmount">₹0</strong><small>Skipped value*</small></div></div>
+      </div>
+    </section>
+
+    <section class="calendar-card">
+      <div class="calendar-head">
+        <button class="nav-btn" id="prevMonth" aria-label="Previous month">‹</button>
+        <div><h2 id="monthTitle">Month Year</h2><p>Tap a date to update it</p></div>
+        <button class="nav-btn" id="nextMonth" aria-label="Next month">›</button>
+      </div>
+      <div class="legend">
+        <span><i class="legend-dot ate-bg"></i>Ate all</span>
+        <span><i class="legend-dot skip-bg"></i>Skipped</span>
+        <span><i class="legend-dot empty-bg"></i>Not marked</span>
+      </div>
+      <div class="weekdays" id="weekdays"></div>
+      <div class="calendar" id="calendar"></div>
+      <div class="selection" id="selection" hidden>
+        <div class="selection-title"><div><b id="selectedDate">Selected date</b><small id="selectedHint">Choose what happened</small></div><button id="closeSelection" class="close-btn">×</button></div>
+        <div class="choice-row">
+          <button class="choice ate-choice" id="markAte">✓ Ate all meals <span id="atePriceLabel">₹140</span></button>
+          <button class="choice skip-choice" id="markSkip">× Skipped <span>₹0</span></button>
+        </div>
+        <button id="clearDay" class="clear-btn">Clear this date</button>
+      </div>
+    </section>
+
+    <section class="summary-card">
+      <div class="section-title"><h2>Monthly mess summary</h2><span class="pill" id="markedDays">0 marked</span></div>
+      <div class="summary-line"><span>Days marked as ate</span><b id="sumAte">0</b></div>
+      <div class="summary-line"><span>Days skipped</span><b id="sumSkip">0</b></div>
+      <div class="summary-line"><span>Unmarked days</span><b id="sumUnmarked">0</b></div>
+      <div class="summary-line total"><span>Estimated mess bill</span><b id="sumBill">₹0</b></div>
+      <p class="fineprint">*Skipped value is not included in the bill. Confirm with your hostel whether skipped days are deducted.</p>
+    </section>
+  </section>
+
+  <section id="extrasTab" class="tab-panel" hidden>
+    <section class="hero extras-hero">
+      <div class="eyebrow">EXTRAS · SEPARATE EXPENSES</div>
+      <div class="bill" id="extrasTotal">₹0</div>
+      <div class="hero-sub" id="extrasMonthLabel">This month's tea, snacks, shakes and more</div>
+      <div class="stats two-stats">
+        <div class="stat"><span class="dot save-dot"></span><div><strong id="extrasCount">0</strong><small>Items logged</small></div></div>
+        <div class="stat"><span class="dot ate-dot"></span><div><strong id="extrasAverage">₹0</strong><small>Average per item</small></div></div>
+      </div>
+    </section>
+
+    <section class="summary-card">
+      <div class="section-title"><h2>Add an extra expense</h2><span class="pill">Independent ledger</span></div>
+      <form id="extraForm" class="extra-form">
+        <label for="extraName">Item name</label>
+        <input id="extraName" maxlength="50" placeholder="e.g. Tea, snacks, shake" required>
+        <div class="form-row">
+          <div class="form-field"><label for="extraPrice">Price (₹)</label><input id="extraPrice" type="number" min="0.01" max="100000" step="0.01" placeholder="20" required></div>
+          <div class="form-field"><label for="extraDate">Date</label><input id="extraDate" type="date" required></div>
+        </div>
+        <button class="primary-btn" type="submit">＋ Add expense</button>
+      </form>
+    </section>
+
+    <section class="summary-card">
+      <div class="section-title"><h2>Extra expense history</h2><span class="pill" id="extraMonthCount">0 entries</span></div>
+      <div class="calendar-head compact-head">
+        <button class="nav-btn" id="extraPrevMonth" aria-label="Previous month">‹</button>
+        <div><h2 id="extraMonthTitle">Month Year</h2><p>Only extras are shown here</p></div>
+        <button class="nav-btn" id="extraNextMonth" aria-label="Next month">›</button>
+      </div>
+      <div id="extrasList" class="extras-list"></div>
+      <div class="summary-line total"><span>Extras total</span><b id="extrasListTotal">₹0</b></div>
+    </section>
+  </section>
+
+  <section id="settingsTab" class="tab-panel" hidden>
+    <section class="summary-card">
+      <div class="section-title"><h2>Mess price settings</h2><span class="pill">Mess tab only</span></div>
+      <p class="settings-copy">Set the amount charged for one full day of mess food. This does not change your Extras expenses.</p>
+      <form id="rateForm" class="extra-form">
+        <label for="dailyRate">Daily mess price (₹)</label>
+        <input id="dailyRate" type="number" min="0" max="100000" step="0.01" required>
+        <button class="primary-btn" type="submit">Save daily price</button>
+      </form>
+      <p class="fineprint">Changing the price updates the calculation for all days marked as “Ate all meals”, including previous months.</p>
+    </section>
+    <section class="tools-card">
+      <h2>Records & backup</h2>
+      <div class="tool-grid">
+        <button class="tool-btn" id="exportBtn"><span>↓</span><b>Export CSV</b><small>Mess + extras</small></button>
+        <button class="tool-btn" id="backupBtn"><span>⬇</span><b>Backup data</b><small>All records & settings</small></button>
+        <button class="tool-btn" id="restoreBtn"><span>⬆</span><b>Restore backup</b><small>Import JSON</small></button>
+        <button class="tool-btn" id="historyBtn"><span>▤</span><b>All mess records</b><small>View saved days</small></button>
+      </div>
+      <input type="file" id="restoreFile" accept="application/json,.json" hidden>
+      <div id="history" class="history" hidden></div>
+    </section>
+  </section>
+  <footer>PEXFO MESS TRACKER <span>·</span> Saved on this device</footer>
+</main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="app.js"></script>
+</body>
+</html>
