@@ -1,9 +1,12 @@
 
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-<rect width="512" height="512" rx="112" fill="#080d0b"/>
-<g fill="none" stroke="#45e34b" stroke-width="18" stroke-linecap="round" stroke-linejoin="round">
-<path d="M165 165c-17-24 19-36 4-66M245 151c-18-29 22-44 4-76M325 165c-17-24 19-36 4-66"/>
-<path d="M102 236c0-20 308-20 308 0v12c-8 94-75 145-154 145S110 342 102 248z"/>
-<path d="M104 239c80 29 224 29 304 0M290 240l92-118M212 394h88"/>
-</g>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     viewBox="0 0 1024 1024">
+  <image
+    x="0"
+    y="0"
+    width="1024"
+    height="1024"
+    xlink:href="./icon.png"
+    preserveAspectRatio="xMidYMid meet"/>
 </svg>
